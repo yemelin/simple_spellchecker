@@ -4,21 +4,6 @@ import (
 	"github.com/yemelin/simple_corrector/trie"
 )
 
-// Corrector -
-type corrector struct {
-	vocabulary []string
-}
-
-// New - constructor
-func New(vocabulary []string) *corrector {
-	return &corrector{vocabulary}
-}
-
-// FixErrors -
-func (c *corrector) FixErrors(text []string) ([]string, int) {
-	return text, 0
-}
-
 type task struct {
 	distances []byte
 	node      *trie.Trie

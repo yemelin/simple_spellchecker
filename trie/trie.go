@@ -1,7 +1,5 @@
 package trie
 
-import "fmt"
-
 // Trie - words converted to tree
 type Trie struct {
 	Letter byte
@@ -21,7 +19,6 @@ func Create(text []string) *Trie {
 		rootNode: rootNode,
 	}
 	t.perform()
-	fmt.Println(counter)
 	return rootNode
 }
 
@@ -35,9 +32,6 @@ type task struct {
 var counter int
 
 func (t *task) perform() {
-	counter++
-	// fmt.Printf("%c", t.rootNode.letter)
-
 	var c byte
 	var from int
 	var node *Trie
@@ -46,7 +40,6 @@ func (t *task) perform() {
 			continue
 		}
 		if word[t.n] != c {
-			// send previous task to the stack
 			if node != nil {
 				tcur := &task{
 					bucket:    t.bucket[from:to],
@@ -54,7 +47,6 @@ func (t *task) perform() {
 					taskStask: t.taskStask,
 					n:         t.n + 1,
 				}
-				// t.taskStask = append(t.taskStask, tcur)
 				tcur.perform()
 			}
 			from = to //new bucket start
@@ -64,8 +56,6 @@ func (t *task) perform() {
 		}
 		if len(word) == t.n+1 {
 			node.Final = true
-			// fmt.Println()
-			// fmt.Println(word, t.n)
 		}
 	}
 	if node != nil {
@@ -75,7 +65,6 @@ func (t *task) perform() {
 			taskStask: t.taskStask,
 			n:         t.n + 1,
 		}
-		// t.taskStask = append(t.taskStask, tcur)
 		tcur.perform()
 	}
 }
