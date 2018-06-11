@@ -23,10 +23,9 @@ func Create(text [][]byte) *Trie {
 }
 
 type task struct {
-	bucket    [][]byte
-	rootNode  *Trie
-	taskStask []*task
-	n         int
+	bucket   [][]byte
+	rootNode *Trie
+	n        int
 }
 
 var counter int
@@ -36,18 +35,15 @@ func (t *task) perform() {
 	var from int
 	var node *Trie
 	for to, word := range t.bucket {
-		// for to := 0; to < len(t.bucket); to++ {
-		// 	word := t.bucket[to]
 		if len(word) <= t.n {
 			continue
 		}
 		if word[t.n] != c {
 			if node != nil {
 				tcur := &task{
-					bucket:    t.bucket[from:to],
-					rootNode:  node,
-					taskStask: t.taskStask,
-					n:         t.n + 1,
+					bucket:   t.bucket[from:to],
+					rootNode: node,
+					n:        t.n + 1,
 				}
 				tcur.perform()
 			}
@@ -62,10 +58,9 @@ func (t *task) perform() {
 	}
 	if node != nil {
 		tcur := &task{
-			bucket:    t.bucket[from:len(t.bucket)],
-			rootNode:  node,
-			taskStask: t.taskStask,
-			n:         t.n + 1,
+			bucket:   t.bucket[from:len(t.bucket)],
+			rootNode: node,
+			n:        t.n + 1,
 		}
 		tcur.perform()
 	}

@@ -11,8 +11,6 @@ type task struct {
 }
 
 func NewTask(word []byte, root *trie.Trie) *task {
-	Min = 100
-	Candidate = ""
 	distances := make([]byte, len(word)+1)
 	for i := 1; i < len(distances); i++ {
 		distances[i] = byte(i)
@@ -24,14 +22,14 @@ func NewTask(word []byte, root *trie.Trie) *task {
 	}
 }
 
-var Min byte = 100
-var Candidate string
-
-func (t *task) Perform() {
-	t._perform([]byte{})
+func (t *task) Perform() (distance byte, bestWord string) {
+	Min := byte(100)
+	Candidate := []byte{}
+	t._perform([]byte{}, &Min, Candidate)
+	return Min, string(Candidate)
 }
 
-func (t *task) _perform(buf []byte) {
+func (t *task) _perform(buf []byte, Min *byte, Candidate []byte) {
 	if len(t.node.Next) == 0 {
 		return
 	}
@@ -42,20 +40,20 @@ func (t *task) _perform(buf []byte) {
 		if d[0] > byte(len(t.word)) {
 			k = byte(len(t.word))
 		}
-		if d[k] > Min {
+		if d[k] > *Min {
 			continue
 		}
 
-		if child.Final && d[len(d)-1] < Min {
-			Min = d[len(d)-1]
-			Candidate = string(buf) + string(child.Letter)
+		if child.Final && d[len(d)-1] < *Min {
+			*Min = d[len(d)-1]
+			Candidate = []byte(string(buf) + string(child.Letter))
 		}
 		nextTask := &task{
 			distances: d,
 			node:      child,
 			word:      t.word,
 		}
-		nextTask._perform(append(buf, child.Letter))
+		nextTask._perform(append(buf, child.Letter), Min, Candidate)
 	}
 }
 

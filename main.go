@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"sync"
 	"time"
 
 	"github.com/yemelin/simple_corrector/corrector"
@@ -52,14 +53,21 @@ func main() {
 	t := trie.Create(vocabulary)
 	trieEnd := time.Now().UnixNano()
 
-	var count byte
-
-	// for i := 0; i < len(limsW); i += 2 {
-	// 	word := w[limsW[i]:limsW[i+1]]
-	// for word := range words {
+	l := len(words)
+	var wg sync.WaitGroup
+	wg.Add(l)
+	counts := make([]byte, len(words))
 	for i := 0; i < len(words); i++ {
-		corrector.NewTask(words[i], t).Perform()
-		count += corrector.Min
+		i1 := i
+		go func() {
+			counts[i1], _ = corrector.NewTask(words[i1], t).Perform()
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+	count := 0
+	for i := 0; i < l; i++ {
+		count += int(counts[i])
 	}
 	done := time.Now().UnixNano()
 
