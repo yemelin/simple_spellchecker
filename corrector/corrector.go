@@ -7,10 +7,10 @@ import (
 type task struct {
 	distances []byte
 	node      *trie.Trie
-	word      string
+	word      []byte
 }
 
-func NewTask(word string, root *trie.Trie) *task {
+func NewTask(word []byte, root *trie.Trie) *task {
 	Min = 100
 	Candidate = ""
 	distances := make([]byte, len(word)+1)
@@ -59,7 +59,7 @@ func (t *task) _perform(buf []byte) {
 	}
 }
 
-func distances(d []byte, letter byte, word string) []byte {
+func distances(d []byte, letter byte, word []byte) []byte {
 	ret := make([]byte, len(d))
 	ret[0] = d[0] + 1 //next level
 	for i := 1; i < len(ret); i++ {

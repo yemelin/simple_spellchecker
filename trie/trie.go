@@ -12,7 +12,7 @@ func create(letter byte) *Trie {
 }
 
 // Create - build a trie from a list of words sorted alphabetically
-func Create(text []string) *Trie {
+func Create(text [][]byte) *Trie {
 	rootNode := create(0)
 	t := &task{
 		bucket:   text,
@@ -23,7 +23,7 @@ func Create(text []string) *Trie {
 }
 
 type task struct {
-	bucket    []string
+	bucket    [][]byte
 	rootNode  *Trie
 	taskStask []*task
 	n         int
@@ -36,6 +36,8 @@ func (t *task) perform() {
 	var from int
 	var node *Trie
 	for to, word := range t.bucket {
+		// for to := 0; to < len(t.bucket); to++ {
+		// 	word := t.bucket[to]
 		if len(word) <= t.n {
 			continue
 		}
